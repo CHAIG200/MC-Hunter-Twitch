@@ -12,11 +12,7 @@ let ps = new TwitchPS({init_topics: init_topics, reconnect: true, debug: false})
 console.log(`Starting Twitch PubSub with channel Id: ${process.env.CHANNELID} and token ${process.env.TOKEN}`)
 
 ps.on('channel-points', (data) => {
-
-  let title = data.redemption.reward.title;
-  let user = data.redemption.user.display_name;
-  let prompt = data.redemption.reward.prompt;
-  executeRedemption(title,user,prompt)
+  executeRedemption(data.redemption.reward.title,data.redemption.user.display_name,data.redemption.reward.prompt)
 });
 
 function executeRedemption(redemption,user,prompt){
@@ -24,8 +20,7 @@ function executeRedemption(redemption,user,prompt){
     switch(redemption){
       case "MC tester":
         console.log("Sending packet...")
-        client.send(redemptionFormat(redemption,user,prompt), 25565, result, (err) => {
-          client.close();
+        client.send(redemptionFormat(redemption,user,prompt), 25566, result, (err) => {
         });
         break;
     }
